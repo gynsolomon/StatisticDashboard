@@ -1,0 +1,5 @@
+# MAC OS Finder files
+.DS_Store
+
+# Dart Library files
+packages/

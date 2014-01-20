@@ -1,0 +1,5 @@
+name: StatisticDashboard
+description: A sample web application
+dependencies:
+  browser: any
+  jsonp: any
