@@ -3,3 +3,4 @@
 
 # Dart Library files
 packages/
+.settings/

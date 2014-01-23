@@ -3,3 +3,7 @@ description: A sample web application
 dependencies:
   browser: any
   jsonp: any
+  angular: any
+  crypto: any
+  intl: any
+  message: any
