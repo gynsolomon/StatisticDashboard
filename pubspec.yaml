@@ -7,3 +7,4 @@ dependencies:
   crypto: any
   intl: any
   message: any
+  jquery: ">=1.0.1 <2.0.0"

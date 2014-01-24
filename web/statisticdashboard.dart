@@ -13,13 +13,14 @@ import 'package:message/message.dart';
 
 part 'requirement_product.dart';
 
-
-
 String apiKey = '1291ff9d8ceb337db6a0069d88079474';
 String apiSecret = '05b9aae8d5305855b1cdfec0db2db140';
 DateTime now = new DateTime.now();
 String dateNow = new DateFormat("yyyy-MM-dd").format(now);
 int timeFuture = now.add(new Duration(minutes:1)).millisecondsSinceEpoch;
+String _roomName;
+StringBuffer strHtml = new StringBuffer();
+
 
 @NgController(
     selector: '[board]',
@@ -30,65 +31,39 @@ class BoardController {
   List<Event> events;
   
   BoardController() {
-    students = _loadUserData();
-    events = _loadEvents();
+  //  students = _loadUserData();
+  //  events = _loadEvents();
   }
   
-  
-  void showUsers(){
-    //context.callMethod('alert', ['Hello from Dart!']);  
-    
-    
-   //alert(event.info['result'].data);
-    
+  void giveRoom(){ 
+    (querySelector('#right-panel') as DivElement).innerHtml="";
+    _roomName = (querySelector("#inputRoomName") as InputElement).value;
+    events = _loadEvents();    
   }
   
+  void showUsers(Event event){
+    Map users = event.info['result']['data']['values'];
+    strHtml.clear();
+    users.forEach(appendUser);
+    (querySelector('#right-panel') as DivElement).innerHtml = strHtml.toString();  
+  }
+  
+  appendUser(String key, Map value){
+    strHtml.write('<p>'+key+'</p></br><p>'+value.toString()+'</p></br>');
+  }
+   
   // Give requirements and load all the data.
   _loadEvents() {
-    var map_notLogin = {
-        "title":"尚未登录",
-        "type":"selfMade",
-    };
-    var map_login = {
-        "title":"登录",
-        "type":"mixpanel",
-        "schema":"http://mixpanel.com/api/2.0/segmentation/",
-        "args":[
-                "event=Login",
-                "from_date=2014-01-14",
-                "to_date=$dateNow",
-                "on=properties[\"Name\"]",
-                "where=\"xw1303\" in properties[\"UserName\"]",
-               //"type=unique",
-               // "limit=5",
-                "expire=$timeFuture",
-                "api_key=$apiKey"
-                ],
-        "api_secret":apiSecret
-    };
+    List<String> lessons = ["章节预习","对顶角基础","邻补角基础","同位角基础"]; // TODO: should get available lessons from api.
+    List mixpanelEvents = [map_login()];
+    for (String lesson in lessons){
+      mixpanelEvents.add(map_enterLesson(lesson));
+      mixpanelEvents.add(map_finishLesson(lesson));
+    }
     
-    var map_finishLesson = {
-        "title":"完成对顶角基础",
-        "type":"mixpanel",
-        "schema":"http://mixpanel.com/api/2.0/segmentation/",
-        "args":[
-                "event=FinishLesson",
-                "from_date=2014-01-14",
-                "to_date=$dateNow",
-                "on=properties[\"Name\"]",
-                "where=\"xw1303\" in properties[\"UserName\"] and \"对顶角基础\" == properties[\"LessonTitle\"]",
-               // "type=unique",
-               // "limit=5",
-                "expire=$timeFuture",
-                "api_key=$apiKey"
-                ],
-        "api_secret":apiSecret                     
-    };
-    
-    List mixpanelEvents = [map_login,map_finishLesson];
     List<Event> result = new List<Event>();
     
-    for(Map event in mixpanelEvents ){
+    for(var event in mixpanelEvents ){
       if(event['type']=="mixpanel"){
         MixpanelExportDataAPI mixpanel =new MixpanelExportDataAPI(event['schema'],event['args'],event['api_secret']);
         result.add(new Event(event['title'],mixpanel:mixpanel));
@@ -185,18 +160,18 @@ class Event{
   
   void fetJson(MixpanelExportDataAPI mixpanel) {
     Future<js.Proxy> result = jsonp.fetch(
-        uriGenerator: (String callback) =>
+        uriGenerator: (callback) =>
             mixpanel.apiUri+"&callback=$callback");
 
     result.then((js.Proxy proxy) {
-      info['result'] = proxy; 
+      String jsonValue = js.context.JSON.stringify(proxy);
+      Map dartJson = JSON.decode(jsonValue);
+      info['result'] = dartJson; 
     }); 
   } 
-}
-       
+}    
+
 class MixpanelExportDataAPI{
- //static final String api_key = ;
- // static final String api_secret = ;
   String _sig;
   String _apiUri;
   

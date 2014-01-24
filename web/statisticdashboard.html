@@ -1,41 +1,45 @@
 <!DOCTYPE html>
 
 <html ng-app>
-  <head>
-    <meta charset="utf-8">
-    <title>StatisticDashboard</title>
-    <link rel="stylesheet" href="statisticdashboard.css">
-    
-  </head>
-  <body>
-    <h1>StatisticDashboard</h1>
-    
-    <p>Hello World!</p>
-    <div id="sample_container_id" board>
-        <div style="display:none"> 
-            <ul>
-                <li class="students_container"
-                    ng-repeat="student in ctrl.students">
-                {{student.userId}} " "{{student.name}}" "{{student.userName}}
-                </li>
-            </ul>
-        </div>
-        <div >
-            <ul>
-              <li class="students_container"
-                  ng-repeat="event in ctrl.events">                  
-                  
-                  <div class="circle"
-                       ng-click="ctrl.showUsers()">
-                  {{event.info['result'].legend_size}}
-                  </div>
-                  <h3>{{event.info['event_name']}}</h3>
-              </li>
-            </ul>
-        </div>
+<head>
+<meta charset="utf-8">
+<title>StatisticDashboard</title>
+<link rel="stylesheet" href="statisticdashboard.css">
+<script src="packages/jquery/jquery.js"></script>
+</head>
+<body board>
+  <h1>StatisticDashboard</h1>
+  <p>欢迎来到数学提高班统计面板!</p>
+  <h3 style="color: white">{{roomName}}</h3>
+
+  <div class="panel" id="left-panel" style="float: left">
+
+    <div id="search_panel">
+      请输入班级号<input type="text" id="inputRoomName" maxlength="6"
+        ng-model="roomName">
+      <button type="submit" ng-click="ctrl.giveRoom()">查询</button>
     </div>
-    <script type="application/dart" src="statisticdashboard.dart"></script>
-    <script src="packages/browser/dart.js"></script>
-    <script src="packages/browser/interop.js"></script>
-  </body>
+    <div style="display: none">
+      <ul>
+        <li class="students_container"
+          ng-repeat="student in ctrl.students">{{student.userId}} "
+          "{{student.name}}" "{{student.userName}}</li>
+      </ul>
+    </div>
+    <div>
+      <ul style="display: table">
+        <li class="students_container" ng-repeat="event in ctrl.events">
+          <div class="circle" ng-click="ctrl.showUsers(event)">
+            <p>{{event.info['result'].legend_size}}</p>
+          </div>
+          <h3>{{event.info['event_name']}}</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="panel" id="right-panel" style="float: right"></div>
+  <script type="application/dart" src="statisticdashboard.dart"></script>
+  <script src="packages/browser/dart.js"></script>
+  <script src="packages/browser/interop.js"></script>
+</body>
 </html>

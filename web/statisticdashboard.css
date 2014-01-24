@@ -1,26 +1,72 @@
 body {
-  background-color: #F8F8F8;
+  background-color:white;
   font-family: 'Open Sans', sans-serif;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.2em;
   margin: 15px;
+  background-image:url("view/landscape.jpg");";
+  display:inline;
 }
 
 h1, p {
   color: #333;
 }
 
-#sample_container_id {
-  width: 100%;
+.panel{
+  width: 40%;
   height: 400px;
   position: relative;
   border: 1px solid #ccc;
-  background-color: #fff;
+  background-color: #ffffff; 
+  overflow:scroll;
+  display:inline-block;
+  margin:20px;
+   
 }
 
 #sample_text_id {
   font-size: 24pt;
   text-align: center;
   margin-top: 140px;
+}
+
+.students_container{
+  display:inline-block;
+  margin:20px;
+  text-align:center;
+}
+
+#search_panel{
+  margin-top:20px;
+  text-align:center;
+  display:block;  
+}
+
+#search_panel > button{
+  color:white;
+  background-color:green;
+  width:50px;
+  height:20px;
+}
+
+#inputRoomName{
+  width:100px;
+  height:20px;
+}
+
+.circle {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px; 
+  background-color:orange;
+  position:relative;
+  margin:0px;
+}
+
+.circle > p {
+    font-size:20px;
+    color:white;
+    text-align:center;
+    margin-top:0px;
 }
