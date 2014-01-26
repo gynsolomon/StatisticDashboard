@@ -4,3 +4,6 @@
 # Dart Library files
 packages/
 .settings/
+
+#WebStorm Setting files
+.idea/
